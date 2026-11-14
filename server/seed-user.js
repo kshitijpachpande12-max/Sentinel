@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const { connectDB } = require('./config/db');
 const User = require('./models/User');
 const Project = require('./models/Project');
-
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 async function seed() {
   await connectDB();
 
