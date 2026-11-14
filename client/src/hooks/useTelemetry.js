@@ -333,13 +333,13 @@ export function useTelemetry({
   }, [services]);
 
   // Client-side Heartbeat / Silence detection:
-  // In 'live' mode, if no telemetry packet is received for >15s, transition status to 'down'
+  // In 'live' mode, if no telemetry packet is received for >30s, transition status to 'down'
   useEffect(() => {
     if (isReplaying || timeRange !== 'live') return;
 
     const timer = setInterval(() => {
       const now = Date.now();
-      const SILENCE_TIMEOUT = 10 * 60 * 1000; // 10 minutes (serverless-friendly for apps with intermittent traffic)
+      const SILENCE_TIMEOUT = 30 * 1000; // 30 seconds: responsive flip to 'down' when traffic stops
 
       setServiceStatuses((prev) => {
         let changed = false;

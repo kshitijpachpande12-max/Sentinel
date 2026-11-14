@@ -387,7 +387,7 @@ export default function Dashboard() {
                             </span>
                           </div>
                           <p className="text-xs text-[#94a3b8] mt-1">
-                            Heartbeat silence detected (&gt;15s without telemetry). The service process is unreachable or terminated. Showing last recorded state.
+                            Heartbeat silence detected (&gt;30s without telemetry). The service process is unreachable or terminated. Showing last recorded state.
                           </p>
                         </div>
                       </div>
