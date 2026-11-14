@@ -14,7 +14,7 @@ const broadcast = require('./services/broadcast');
 const { setupIngestNamespace } = require('./sockets/ingest');
 const { setupDashboardNamespace } = require('./sockets/dashboard');
 const { computeRollups } = require('./services/rollup');
-
+const dns = require('dns');
 // Routes
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
@@ -26,6 +26,7 @@ const statsRoutes = require('./routes/stats');
 
 // ── Express app ──────────────────────────────────────────────
 const app = express();
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 // Ensure MongoDB is connected (critical for Vercel serverless cold starts)
 app.use(async (req, res, next) => {
