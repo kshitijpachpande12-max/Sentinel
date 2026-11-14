@@ -339,7 +339,7 @@ export function useTelemetry({
 
     const timer = setInterval(() => {
       const now = Date.now();
-      const SILENCE_TIMEOUT = 60000; // 60 seconds (prevents premature false 'down' under cloud/batch jitter)
+      const SILENCE_TIMEOUT = 10 * 60 * 1000; // 10 minutes (serverless-friendly for apps with intermittent traffic)
 
       setServiceStatuses((prev) => {
         let changed = false;

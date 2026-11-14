@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 
     const states = await ServiceState.find({ projectId: project._id }).lean();
     const now = Date.now();
-    const SILENCE_TIMEOUT = 60000; // 60s window for serverless / cloud jitter
+    const SILENCE_TIMEOUT = 10 * 60 * 1000; // 10 minutes (serverless-friendly for apps with intermittent traffic)
 
     // Group by serviceName
     const grouped = {};
