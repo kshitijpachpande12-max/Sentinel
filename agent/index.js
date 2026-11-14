@@ -104,7 +104,8 @@ agent.init = function(opts) {
     }
 
     if (!opts || !opts.apiKey || !opts.serviceName) {
-      throw new Error('sentinel-agent: apiKey and serviceName are required');
+      console.warn('[sentinel-agent] Warning: apiKey and serviceName are required to stream metrics. Running in passive safe mode.');
+      return agent;
     }
 
     config = {
@@ -213,3 +214,5 @@ agent.collectMetrics = collectMetrics;
 agent.sendHeartbeat = sendHeartbeat;
 
 module.exports = agent;
+module.exports.default = agent;
+module.exports.agent = agent;

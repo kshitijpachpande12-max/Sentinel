@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "Lightweight telemetry agent for Node.js apps — sends metrics, latency & errors to Sentinel",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js",
+      "default": "./index.js"
+    }
+  },
   "scripts": {
     "test": "node --test __tests__/*.test.js"
   },
