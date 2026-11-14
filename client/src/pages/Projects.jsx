@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { MagicCard, ShinyButton, AnimatedGradientText } from '../components/magicui';
-import { CanvasCrowd, KineticMenu } from '../components/skipper';
+import { CanvasCrowd } from '../components/skipper';
 import { AuroraBackground } from '../components/ui/visuals';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -17,7 +17,6 @@ export default function Projects() {
   const [copied, setCopied] = useState(null);
   const [error, setError] = useState('');
   const [toast, setToast] = useState(null);
-  const [showMenu, setShowMenu] = useState(false);
   const toastTimeoutRef = useRef(null);
 
   const getAuthToken = () => {
@@ -147,16 +146,6 @@ export default function Projects() {
         </div>
         <div className="flex items-center gap-3">
           <button
-            type="button"
-            onClick={() => setShowMenu(true)}
-            className="flex items-center gap-2 text-xs font-mono text-[#94a3b8] hover:text-white bg-[#121316] hover:bg-[#18191d] border border-[#22242a] hover:border-indigo-500/50 px-3 py-1.5 rounded-lg transition-all cursor-pointer group"
-          >
-            <span className="w-4 h-4 rounded-md bg-[#202227] group-hover:bg-indigo-500/20 border border-[#2c2f38] flex items-center justify-center text-[10px] text-white">
-              ⤢
-            </span>
-            <span>Kinetic Menu</span>
-          </button>
-          <button
             onClick={logout}
             className="text-sm text-[#94a3b8] transition-colors hover:text-white px-3 py-1.5 rounded-lg hover:bg-[#18191d]"
           >
@@ -274,22 +263,6 @@ export default function Projects() {
           >
             ✕
           </button>
-        </div>
-      )}
-
-      {/* Kinetic Navigation Modal */}
-      {showMenu && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md">
-            <button
-              type="button"
-              onClick={() => setShowMenu(false)}
-              className="absolute -top-12 right-2 text-[#94a3b8] hover:text-white text-xs font-mono uppercase bg-[#141518] hover:bg-[#1f2024] px-3.5 py-1.5 rounded-xl border border-[#22242a] flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
-            >
-              <span>✕</span> Close
-            </button>
-            <KineticMenu onClose={() => setShowMenu(false)} />
-          </div>
         </div>
       )}
     </div>

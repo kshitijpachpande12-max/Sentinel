@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { TextRevealCard } from '../components/magicui';
-import { CanvasCrowd, KineticTitle, KineticMenu, LiquidSimulation } from '../components/skipper';
+import { CanvasCrowd, KineticTitle, LiquidSimulation } from '../components/skipper';
 
 export default function Login() {
   const { login } = useAuth();
@@ -11,7 +11,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +47,7 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         {/* Left Column: App Showcase & Intro */}
         <div className="lg:col-span-7 space-y-6 text-left">
-          {/* Top Badge & Kinetic Menu Button */}
+          {/* Top Badge */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#121316]/90 border border-[#22242a] backdrop-blur-md shadow-sm">
               <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
@@ -56,17 +55,6 @@ export default function Login() {
                 SENTINEL v2.0 • REAL-TIME OBSERVABILITY
               </span>
             </div>
-
-            <button
-              type="button"
-              onClick={() => setShowMenu(true)}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#121316] hover:bg-[#18191d] border border-[#22242a] hover:border-indigo-500/50 text-xs font-mono text-[#94a3b8] hover:text-white transition-all shadow-sm cursor-pointer group"
-            >
-              <span className="w-4 h-4 rounded-md bg-[#202227] group-hover:bg-indigo-500/20 border border-[#2c2f38] flex items-center justify-center text-[10px] text-white">
-                ⤢
-              </span>
-              <span>Kinetic Menu</span>
-            </button>
           </div>
 
           {/* Kinetic Title */}
@@ -244,22 +232,6 @@ export default function Login() {
           </div>
         </div>
       </div>
-
-      {/* Kinetic Navigation Modal */}
-      {showMenu && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md">
-            <button
-              type="button"
-              onClick={() => setShowMenu(false)}
-              className="absolute -top-12 right-2 text-[#94a3b8] hover:text-white text-xs font-mono uppercase bg-[#141518] hover:bg-[#1f2024] px-3.5 py-1.5 rounded-xl border border-[#22242a] flex items-center gap-1.5 transition-all shadow-md"
-            >
-              <span>✕</span> Close
-            </button>
-            <KineticMenu onClose={() => setShowMenu(false)} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

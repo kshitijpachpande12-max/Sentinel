@@ -87,4 +87,51 @@ router.get('/', async (req, res) => {
   }
 });
 
+// DELETE /:serviceName — remove a microservice and its state/events from a project
+router.delete('/:serviceName', async (req, res) => {
+  try {
+    const { projectId } = req.query;
+    const { serviceName } = req.params;
+
+    if (!projectId) {
+      return res.status(400).json({ error: 'projectId is required' });
+    }
+    if (!serviceName) {
+      return res.status(400).json({ error: 'serviceName is required' });
+    }
+
+    const { resolveProject } = require('../utils/projectResolver');
+    const project = await resolveProject(projectId);
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+    if (project.ownerId.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    const TelemetryEvent = require('../models/TelemetryEvent');
+
+    // Remove from ServiceState
+    const stateResult = await ServiceState.deleteMany({
+      projectId: project._id,
+      serviceName,
+    });
+
+    // Clean up associated telemetry events to prevent fallback reappearance
+    const eventResult = await TelemetryEvent.deleteMany({
+      projectId: project._id,
+      serviceName,
+    });
+
+    res.json({
+      message: `Service '${serviceName}' successfully removed`,
+      serviceName,
+      deletedStates: stateResult.deletedCount,
+      deletedEvents: eventResult.deletedCount,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

@@ -11,7 +11,6 @@ import RouteTable from '../components/RouteTable';
 import ErrorGroups from '../components/ErrorGroups';
 import DebugFooter from '../components/DebugFooter';
 import { AnimatedGradientText } from '../components/magicui';
-import { KineticMenu } from '../components/skipper';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -20,7 +19,6 @@ export default function Dashboard() {
   const { token, logout } = useAuth();
   const navigate = useNavigate();
 
-  const [showMenu, setShowMenu] = useState(false);
   const [services, setServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
   const [activeTabService, setActiveTabService] = useState(null);
@@ -66,6 +64,27 @@ export default function Dashboard() {
       isCancelled = true;
       clearInterval(interval);
     };
+  }, [projectId, token]);
+
+  // Handle deleting a microservice from project
+  const deleteService = useCallback(async (serviceName) => {
+    try {
+      const res = await fetch(`${API}/api/services/${encodeURIComponent(serviceName)}?projectId=${encodeURIComponent(projectId)}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Failed to delete microservice');
+      }
+
+      // Immediately prune from local UI state
+      setServices((prev) => prev.filter((s) => (typeof s === 'string' ? s : s.serviceName) !== serviceName));
+      setSelectedServices((prev) => prev.filter((s) => s !== serviceName));
+      setActiveTabService((prev) => (prev === serviceName ? null : prev));
+    } catch (err) {
+      alert(`Delete failed: ${err.message}`);
+    }
   }, [projectId, token]);
 
   // Handle service checkbox toggle.
@@ -214,16 +233,6 @@ export default function Dashboard() {
 
           <div className="flex items-center gap-2 ml-2">
             <button
-              type="button"
-              onClick={() => setShowMenu(true)}
-              className="flex items-center gap-1.5 text-xs font-mono text-[#94a3b8] hover:text-white bg-[#121316] hover:bg-[#18191d] border border-[#22242a] hover:border-indigo-500/50 px-3 py-1.5 rounded-lg transition-all cursor-pointer group"
-            >
-              <span className="w-3.5 h-3.5 rounded bg-[#202227] group-hover:bg-indigo-500/20 border border-[#2c2f38] flex items-center justify-center text-[9px] text-white">
-                ⤢
-              </span>
-              <span>Menu</span>
-            </button>
-            <button
               onClick={logout}
               className="text-xs text-[#94a3b8] hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-[#18191d] cursor-pointer"
             >
@@ -294,6 +303,7 @@ export default function Dashboard() {
                 selected={selectedServices}
                 onToggle={toggleService}
                 statuses={serviceStatuses}
+                onDelete={deleteService}
               />
             )}
           </div>
@@ -532,22 +542,6 @@ export default function Dashboard() {
         renderRate={renderRate}
         activeServices={selectedServices.length}
       />
-
-      {/* Kinetic Navigation Modal */}
-      {showMenu && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md">
-            <button
-              type="button"
-              onClick={() => setShowMenu(false)}
-              className="absolute -top-12 right-2 text-[#94a3b8] hover:text-white text-xs font-mono uppercase bg-[#141518] hover:bg-[#1f2024] px-3.5 py-1.5 rounded-xl border border-[#22242a] flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
-            >
-              <span>✕</span> Close
-            </button>
-            <KineticMenu onClose={() => setShowMenu(false)} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

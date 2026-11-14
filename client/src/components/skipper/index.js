@@ -4,5 +4,4 @@
  */
 export { CanvasCrowd } from "./canvas-crowd";
 export { KineticTitle } from "./kinetic-text";
-export { KineticMenu } from "./kinetic-menu";
 export { LiquidSimulation } from "./liquid-simulation";

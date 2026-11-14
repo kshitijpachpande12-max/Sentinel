@@ -38,4 +38,42 @@ describe('Delete operations', () => {
     assert.strictEqual(res.status, 404);
     assert.strictEqual(res.error, 'Project not found');
   });
+
+  it('validates microservice deletion removes service states and events', () => {
+    let mockServiceStates = [
+      { projectId: 'p1', serviceName: 'cart-service' },
+      { projectId: 'p1', serviceName: 'payment-service' },
+      { projectId: 'p2', serviceName: 'cart-service' },
+    ];
+    let mockTelemetryEvents = [
+      { projectId: 'p1', serviceName: 'cart-service', eventId: 'e1' },
+      { projectId: 'p1', serviceName: 'payment-service', eventId: 'e2' },
+      { projectId: 'p2', serviceName: 'cart-service', eventId: 'e3' },
+    ];
+
+    function deleteMicroservice(projectId, serviceName) {
+      const statesBefore = mockServiceStates.length;
+      mockServiceStates = mockServiceStates.filter(
+        (s) => !(s.projectId === projectId && s.serviceName === serviceName)
+      );
+      const eventsBefore = mockTelemetryEvents.length;
+      mockTelemetryEvents = mockTelemetryEvents.filter(
+        (e) => !(e.projectId === projectId && e.serviceName === serviceName)
+      );
+
+      return {
+        deletedStates: statesBefore - mockServiceStates.length,
+        deletedEvents: eventsBefore - mockTelemetryEvents.length,
+      };
+    }
+
+    const res = deleteMicroservice('p1', 'cart-service');
+    assert.strictEqual(res.deletedStates, 1);
+    assert.strictEqual(res.deletedEvents, 1);
+    assert.strictEqual(mockServiceStates.length, 2);
+    assert.strictEqual(mockTelemetryEvents.length, 2);
+    assert.strictEqual(mockServiceStates.some((s) => s.projectId === 'p1' && s.serviceName === 'cart-service'), false);
+    // Other projects remain untouched
+    assert.strictEqual(mockServiceStates.some((s) => s.projectId === 'p2' && s.serviceName === 'cart-service'), true);
+  });
 });

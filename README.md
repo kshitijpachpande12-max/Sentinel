@@ -128,7 +128,7 @@ Enterprise observability platforms (Datadog, New Relic, Dynatrace) are notorious
 - **🌐 HTTP Traffic Analytics**: Real-time request throughput (RPS), HTTP 4xx & 5xx error rates, latency percentiles (**P50**, **P95**, **P99**), and per-route drilldowns.
 - **🚨 Intelligent Anomaly Detection**: Real-time statistical z-score evaluation alerting on unexpected CPU/memory drifts and automated threshold alerts on error spikes.
 - **🔍 Error Tracking & Stack Grouping**: Real-time exception capture grouped automatically by stack trace hash (`stackHash`) with occurrence counters and detailed route contextualization.
-- **💓 Service Health & Fleet Monitoring**: Automatic heartbeat tracking across distributed services and instances with instant status toggling (`up` / `down`) on silence timeouts (>15s).
+- **💓 Service Health & Fleet Monitoring**: Automatic heartbeat tracking across distributed services and instances with instant status toggling (`up` / `down`) on silence timeouts (>15s), with one-click microservice deletion and telemetry purging.
 - **📂 Multi-Project Support & Secure Auth**: Project-isolated namespaces guarded by API keys (`x-api-key`) for ingestion and JWT authentication for UI access.
 - **🔄 Isolated Service Subscriptions**: Independent per-tab/per-widget Socket.IO room subscriptions enabling targeted live feeds without redundant wire traffic.
 - **⏪ Historical Data with Seamless Live Merge**: Time-range selector (15m, 1h, 6h, 24h) backfilling historical aggregates, automatically merging real-time events without duplication via `eventId` dedup and `asOf` cursors.
