@@ -241,7 +241,7 @@ Benchmarks captured using `scripts/bench.js` over 30-second sustained stress run
 | :--- | :--- | :--- | :--- |
 | **100** | 99 | 0 | 6ms |
 | **500** | 497 | 0 | 14ms |
-| **1000** | 987 | 0 | 25ms |
+| **1000** | 917 | 0 | 25ms |
 
 *(Run `npm run bench` inside `scripts/` to generate live platform benchmarks on your hardware).*
 
